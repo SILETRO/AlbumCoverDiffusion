@@ -1,0 +1,40 @@
+# LoRA Fine-tuning Configuration for PixArt-Sigma
+# Hardware: Kaggle 2x T4 GPUs (16GB VRAM each)
+
+base_model: "PixArt-alpha/PixArt-Sigma-XL-2-1024-MS"
+dataset_path: "./dataset"
+resolution: 512
+
+lora_rank: 8
+lora_alpha: 16
+lora_dropout: 0.05
+target_modules:
+  - "to_q"
+  - "to_k"
+  - "to_v"
+  - "to_out.0"
+  - "proj_in"
+  - "proj_out"
+  - "ff.net.0.proj"
+  - "ff.net.2"
+
+train_batch_size: 2
+gradient_accumulation_steps: 4
+num_train_epochs: 4
+learning_rate: 1.0e-4
+lr_scheduler: "cosine"
+lr_warmup_steps: 50
+adam_beta1: 0.9
+adam_beta2: 0.999
+adam_weight_decay: 0.01
+max_grad_norm: 1.0
+mixed_precision: "fp16"
+gradient_checkpointing: true
+
+noise_scheduler: "DDPMScheduler"
+output_dir: "./lora_album_cover"
+checkpointing_steps: 500
+seed: 42
+snr_gamma: 5.0
+max_token_length: 304
+lyric_max_chars: 250
